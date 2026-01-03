@@ -6,6 +6,7 @@
 import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Mail, Briefcase, ChevronLeft, ChevronRight } from "lucide-react";
+// Images are now in public folder
 
 // --- Data: team members ---
 const people = [
@@ -15,8 +16,7 @@ const people = [
     role: "Frontend Dev",
     email: "arpanchowdhury003@gmail.com",
     linkedin: "https://www.linkedin.com/in/arpan-chowdhury-775294251/",
-    profile:
-      "https://media.licdn.com/dms/image/v2/D5603AQGzKCr7mCSNdg/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1703521749869?e=1769040000&v=beta&t=0AgeTiwLG0l1DZOFM4iCqVC5YD0dssJtexwlKNERvA4",
+    profile: "/Arpan@Image.jpg",
   },
   {
     id: 2,
@@ -24,8 +24,7 @@ const people = [
     role: "Backend Dev",
     email: "himadridey165@gmail.com",
     linkedin: "https://www.linkedin.com/in/himadri-dey-1505b1236/",
-    profile:
-      "https://media.licdn.com/dms/image/v2/D5603AQGzkvMJ4G62Jg/profile-displayphoto-scale_400_400/B56ZpDShlPKEAg-/0/1762065521533?e=1769040000&v=beta&t=uQyndixpKBOVdQ9m4UFzDaSCgsiVRqW6E-KlwuNT28Y",
+    profile: "/Himadri@Image.jpg",
   },
   {
     id: 3,
@@ -33,8 +32,7 @@ const people = [
     role: "AI Engineer",
     email: "arittrabag@gmail.com",
     linkedin: "https://www.linkedin.com/in/arittra-bag-00b12a1b5/",
-    profile:
-      "https://media.licdn.com/dms/image/v2/D5603AQGlzEW7PY9eWQ/profile-displayphoto-shrink_400_400/B56ZUheUtxHEAg-/0/1740023354448?e=1769040000&v=beta&t=1__fM41NPmqymbLDt2zurj6LQx9QWheJzDnu0-lvxzY",
+    profile: "/Arittra@Image.jpg",
   },
   {
     id: 4,
@@ -42,8 +40,7 @@ const people = [
     role: "Full Stack Dev",
     email: "bhowmikmayukh12@gmail.com",
     linkedin: "https://www.linkedin.com/in/mbwik/",
-    profile:
-      "https://media.licdn.com/dms/image/v2/D5603AQFiY_TQhBBlLw/profile-displayphoto-scale_400_400/B56ZfQ1EnlHoAg-/0/1751555263957?e=1769040000&v=beta&t=lMSm1BxNVm0uILMBuiQMzUkB71-z8Jn8a9QV_XEBNoY",
+    profile: "/Mayukh@Image.jpg",
   },
 ];
 
