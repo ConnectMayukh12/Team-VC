@@ -82,15 +82,16 @@ export function Navbar() {
                 </a>
               ))}
               <ThemeToggle variant="minimal" />
-              <button
+              <Link
+                to="/dashboard"
                 className={`px-4 py-2 rounded-full transition-all border ${
                   resolvedTheme === "dark"
                     ? "bg-white/10 hover:bg-white/20 border-white/10"
                     : "bg-slate-900/10 hover:bg-slate-900/20 border-slate-900/10"
                 }`}
               >
-                Launch Demo
-              </button>
+                Launch Dashboard
+              </Link>
             </div>
 
             {/* Mobile Menu Button */}

@@ -9,6 +9,7 @@ import { useTheme } from "@/context/ThemeContext";
 import { useInView } from "@/hooks";
 import { PlayIcon, ArrowRightIcon, ArrowDownIcon } from "@/components/icons";
 import { WORKFLOW_STEPS, AURORA_COLORS_DARK } from "@/constants";
+import { Link } from "react-router-dom";
 
 export function HeroSection() {
   const { resolvedTheme } = useTheme();
@@ -109,20 +110,24 @@ export function HeroSection() {
               className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center lg:justify-start px-2 sm:px-0 animate-fade-in-up animate-delay-400 opacity-0"
               style={{ animationFillMode: "forwards" }}
             >
-              <button className="group px-6 sm:px-8 py-3 sm:py-4 rounded-xl bg-linear-to-r from-purple-600 to-cyan-600 hover:from-purple-500 hover:to-cyan-500 transition-all duration-300 shadow-lg shadow-purple-500/25 hover:shadow-purple-500/40 hover:scale-105 flex items-center justify-center gap-2 sm:gap-3 font-semibold text-white text-sm sm:text-base">
+              <Link
+                to="/dashboard"
+                className="group px-6 sm:px-8 py-3 sm:py-4 rounded-xl bg-linear-to-r from-purple-600 to-cyan-600 hover:from-purple-500 hover:to-cyan-500 transition-all duration-300 shadow-lg shadow-purple-500/25 hover:shadow-purple-500/40 hover:scale-105 flex items-center justify-center gap-2 sm:gap-3 font-semibold text-white text-sm sm:text-base"
+              >
                 <PlayIcon />
-                Launch Demo
+                Launch Dashboard
                 <ArrowRightIcon />
-              </button>
-              <button
+              </Link>
+              <Link
+                to="/team"
                 className={`px-6 sm:px-8 py-3 sm:py-4 rounded-xl transition-all duration-300 hover:scale-105 flex items-center justify-center gap-2 sm:gap-3 font-semibold text-sm sm:text-base ${
                   resolvedTheme === "dark"
                     ? "bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20"
                     : "bg-slate-900/5 hover:bg-slate-900/10 border border-slate-900/10 hover:border-slate-900/20"
                 }`}
               >
-                View Architecture
-              </button>
+                View Team Members
+              </Link>
             </div>
           </div>
 
