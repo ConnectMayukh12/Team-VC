@@ -141,7 +141,7 @@ export function OrbitCarousel() {
 
   return (
     <div
-      className="flex flex-col items-center p-4 relative min-h-[400px] transition-colors duration-300"
+      className="flex flex-col items-center p-4 relative min-h-100 transition-colors duration-300"
       onMouseEnter={() => setIsHovering(true)}
       onMouseLeave={() => setIsHovering(false)}
     >
