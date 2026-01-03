@@ -4,3 +4,4 @@
  */
 
 export { useInView } from "./useInView";
+export { useIsMobile } from "./use-mobile";
