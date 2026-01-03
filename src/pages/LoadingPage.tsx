@@ -4,11 +4,11 @@
  * @module pages/LoadingPage
  */
 
-import "./LoadingPage.css";
+// Styles imported via src/styles/index.ts
 
 export function LoadingPage() {
   return (
-    <div className="loading-page">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-linear-to-br from-[#0f0a1f] via-[#1a1035] to-[#0d1117]">
       <div
         aria-label="Orange and tan hamster running in a metal wheel"
         role="img"
@@ -31,9 +31,9 @@ export function LoadingPage() {
         </div>
         <div className="spoke" />
       </div>
-      <p className="loading-text">Loading...</p>
+      <p className="mt-8 text-xl font-medium text-zinc-400 animate-pulse">
+        Loading...
+      </p>
     </div>
   );
 }
-
-export default LoadingPage;

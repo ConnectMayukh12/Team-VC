@@ -151,7 +151,7 @@ export default function Stepper({
               {currentStep !== 1 && (
                 <button
                   onClick={handleBack}
-                  className={`duration-350 rounded px-2 py-1 transition ${
+                  className={`rounded px-2 py-1 transition-all duration-200 hover:scale-105 active:scale-95 ${
                     currentStep === 1 ? "pointer-events-none opacity-50" : ""
                   } ${
                     theme === "dark"
@@ -166,7 +166,7 @@ export default function Stepper({
               <button
                 onClick={isLastStep ? handleComplete : handleNext}
                 disabled={nextButtonProps?.disabled}
-                className={`duration-350 flex items-center justify-center rounded-full bg-green-500 py-1.5 px-3.5 font-medium tracking-tight text-white transition cursor-pointer hover:bg-green-600 active:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-green-500 ${
+                className={`flex items-center justify-center rounded-full bg-green-500 py-1.5 px-3.5 font-medium tracking-tight text-white transition-all duration-200 cursor-pointer hover:bg-green-600 hover:scale-105 active:scale-95 active:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-green-500 disabled:hover:scale-100 ${
                   nextButtonProps?.className || ""
                 }`}
                 {...nextButtonProps}
@@ -202,7 +202,12 @@ function StepContentWrapper({
     <motion.div
       style={{ position: "relative", overflow: "hidden" }}
       animate={{ height: isCompleted ? 0 : parentHeight }}
-      transition={{ type: "spring", duration: 0.4 }}
+      transition={{
+        type: "spring",
+        stiffness: 300,
+        damping: 30,
+        duration: 0.5,
+      }}
       className={className}
     >
       <AnimatePresence initial={false} mode="sync" custom={direction}>
@@ -247,7 +252,12 @@ function SlideTransition({
       initial="enter"
       animate="center"
       exit="exit"
-      transition={{ duration: 0.4 }}
+      transition={{
+        type: "spring",
+        stiffness: 300,
+        damping: 30,
+        duration: 0.5,
+      }}
       style={{ position: "absolute", left: 0, right: 0, top: 0 }}
     >
       {children}
@@ -257,16 +267,19 @@ function SlideTransition({
 
 const stepVariants: Variants = {
   enter: (dir: number) => ({
-    x: dir >= 0 ? "-100%" : "100%",
+    x: dir >= 0 ? "-80%" : "80%",
     opacity: 0,
+    scale: 0.98,
   }),
   center: {
     x: "0%",
     opacity: 1,
+    scale: 1,
   },
   exit: (dir: number) => ({
-    x: dir >= 0 ? "50%" : "-50%",
+    x: dir >= 0 ? "40%" : "-40%",
     opacity: 0,
+    scale: 0.98,
   }),
 };
 
@@ -315,6 +328,8 @@ function StepIndicator({
       className="relative cursor-pointer outline-none focus:outline-none"
       animate={status}
       initial={false}
+      whileHover={{ scale: 1.1 }}
+      whileTap={{ scale: 0.95 }}
     >
       <motion.div
         variants={{
@@ -326,7 +341,7 @@ function StepIndicator({
           active: { scale: 1, backgroundColor: "#22c55e", color: "#22c55e" },
           complete: { scale: 1, backgroundColor: "#22c55e", color: "#3b82f6" },
         }}
-        transition={{ duration: 0.3 }}
+        transition={{ type: "spring", stiffness: 400, damping: 25 }}
         className="flex h-8 w-8 items-center justify-center rounded-full font-semibold"
       >
         {status === "complete" ? (
@@ -363,7 +378,12 @@ function StepConnector({ isComplete, theme = "dark" }: StepConnectorProps) {
         variants={lineVariants}
         initial={false}
         animate={isComplete ? "complete" : "incomplete"}
-        transition={{ duration: 0.4 }}
+        transition={{
+          type: "spring",
+          stiffness: 300,
+          damping: 30,
+          duration: 0.5,
+        }}
       />
     </div>
   );

@@ -112,7 +112,7 @@ export function HeroSection() {
             >
               <Link
                 to="/dashboard"
-                className="group px-6 sm:px-8 py-3 sm:py-4 rounded-xl bg-linear-to-r from-purple-600 to-cyan-600 hover:from-purple-500 hover:to-cyan-500 transition-all duration-300 shadow-lg shadow-purple-500/25 hover:shadow-purple-500/40 hover:scale-105 flex items-center justify-center gap-2 sm:gap-3 font-semibold text-white text-sm sm:text-base"
+                className="group px-6 sm:px-8 py-3 sm:py-4 rounded-xl bg-linear-to-r from-purple-600 to-cyan-600 hover:from-purple-500 hover:to-cyan-500 transition-all duration-300 shadow-lg shadow-purple-500/25 hover:shadow-purple-500/40 hover:scale-105 active:scale-[0.98] flex items-center justify-center gap-2 sm:gap-3 font-semibold text-white text-sm sm:text-base"
               >
                 <PlayIcon />
                 Launch Dashboard
@@ -120,7 +120,7 @@ export function HeroSection() {
               </Link>
               <Link
                 to="/team"
-                className={`px-6 sm:px-8 py-3 sm:py-4 rounded-xl transition-all duration-300 hover:scale-105 flex items-center justify-center gap-2 sm:gap-3 font-semibold text-sm sm:text-base ${
+                className={`px-6 sm:px-8 py-3 sm:py-4 rounded-xl transition-all duration-300 hover:scale-105 active:scale-[0.98] flex items-center justify-center gap-2 sm:gap-3 font-semibold text-sm sm:text-base ${
                   resolvedTheme === "dark"
                     ? "bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20"
                     : "bg-slate-900/5 hover:bg-slate-900/10 border border-slate-900/10 hover:border-slate-900/20"

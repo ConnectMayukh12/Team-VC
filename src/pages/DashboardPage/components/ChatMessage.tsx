@@ -33,7 +33,11 @@ export function ChatMessage({
     const imageIndex = imageMessages.indexOf(message) % IMAGE_VARIANTS.length;
 
     return (
-      <div key={index} className="flex gap-4 justify-start animate-fade-in">
+      <div
+        key={index}
+        className="flex gap-4 justify-start animate-fade-in"
+        style={{ animationDelay: `${index * 50}ms` }}
+      >
         <div className="shrink-0">
           <div className="h-10 w-10 rounded-full bg-yellow-500 flex items-center justify-center">
             <span className="text-sm font-bold text-black tracking-tight">

@@ -14,11 +14,11 @@ export * from "./sections";
 export * from "./icons";
 
 // UI components
-export * from "./ui/button";
-export * from "./ui/theme-toggle";
+export * from "./ui";
 
-// Special components
+// Special effect components
 export { default as Aurora } from "./Aurora";
 export { Spider } from "./Spider";
 export { OrbitCarousel } from "./OrbitCarousel";
 export { ScrollToHash } from "./ScrollToHash";
+export { Stepper, Step } from "./Stepper";

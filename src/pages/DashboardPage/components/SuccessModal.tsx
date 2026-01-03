@@ -31,13 +31,13 @@ export function SuccessModal({
     <div className="fixed inset-0 z-50 flex items-center justify-center">
       {/* Backdrop */}
       <div
-        className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+        className="absolute inset-0 bg-black/60 backdrop-blur-sm animate-fade-in"
         onClick={onClose}
       />
 
       {/* Modal */}
       <div
-        className={`relative z-10 w-full max-w-md mx-4 rounded-2xl shadow-2xl animate-fade-in ${
+        className={`relative z-10 w-full max-w-md mx-4 rounded-2xl shadow-2xl animate-scale-in ${
           resolvedTheme === "dark"
             ? "bg-zinc-900 border border-zinc-800"
             : "bg-white border border-gray-200"
@@ -46,7 +46,7 @@ export function SuccessModal({
         {/* Close button */}
         <button
           onClick={onClose}
-          className={`absolute top-4 right-4 p-1 rounded-full transition-colors ${
+          className={`absolute top-4 right-4 p-1 rounded-full transition-all duration-200 hover:scale-110 active:scale-95 ${
             resolvedTheme === "dark"
               ? "hover:bg-zinc-800 text-zinc-400"
               : "hover:bg-gray-100 text-gray-500"
@@ -85,7 +85,7 @@ export function SuccessModal({
             onClick={() => {
               alert("Downloading your creative...");
             }}
-            className="w-full flex items-center justify-center gap-2 px-6 py-4 rounded-xl bg-linear-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-semibold text-lg transition-all shadow-lg hover:shadow-green-500/30 mb-4"
+            className="w-full flex items-center justify-center gap-2 px-6 py-4 rounded-xl bg-linear-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-semibold text-lg transition-all duration-200 shadow-lg hover:shadow-green-500/30 hover:scale-[1.02] active:scale-[0.98] mb-4"
           >
             <DownloadIcon className="h-5 w-5" />
             Download Now
@@ -116,25 +116,25 @@ export function SuccessModal({
             <div className="flex items-center justify-center gap-3">
               <button
                 onClick={() => window.open("https://instagram.com", "_blank")}
-                className="p-3 rounded-full bg-linear-to-br from-purple-500 via-pink-500 to-orange-400 hover:opacity-90 transition-opacity shadow-lg"
+                className="p-3 rounded-full bg-linear-to-br from-purple-500 via-pink-500 to-orange-400 hover:opacity-90 transition-all duration-200 hover:scale-110 active:scale-95 shadow-lg"
               >
                 <InstagramIcon className="h-6 w-6 text-white" />
               </button>
               <button
                 onClick={() => window.open("https://facebook.com", "_blank")}
-                className="p-3 rounded-full bg-[#1877F2] hover:opacity-90 transition-opacity shadow-lg"
+                className="p-3 rounded-full bg-[#1877F2] hover:opacity-90 transition-all duration-200 hover:scale-110 active:scale-95 shadow-lg"
               >
                 <FacebookIcon className="h-6 w-6 text-white" />
               </button>
               <button
                 onClick={() => window.open("https://linkedin.com", "_blank")}
-                className="p-3 rounded-full bg-[#0A66C2] hover:opacity-90 transition-opacity shadow-lg"
+                className="p-3 rounded-full bg-[#0A66C2] hover:opacity-90 transition-all duration-200 hover:scale-110 active:scale-95 shadow-lg"
               >
                 <LinkedinIcon className="h-6 w-6 text-white" />
               </button>
               <button
                 onClick={() => window.open("https://x.com", "_blank")}
-                className={`p-3 rounded-full transition-opacity shadow-lg ${
+                className={`p-3 rounded-full transition-all duration-200 hover:scale-110 active:scale-95 shadow-lg ${
                   resolvedTheme === "dark"
                     ? "bg-white hover:opacity-90"
                     : "bg-black hover:opacity-90"
@@ -151,7 +151,7 @@ export function SuccessModal({
               </button>
               <button
                 onClick={() => window.open("https://wa.me", "_blank")}
-                className="p-3 rounded-full bg-[#25D366] hover:opacity-90 transition-opacity shadow-lg"
+                className="p-3 rounded-full bg-[#25D366] hover:opacity-90 transition-all duration-200 hover:scale-110 active:scale-95 shadow-lg"
               >
                 <MessageCircleIcon className="h-6 w-6 text-white" />
               </button>

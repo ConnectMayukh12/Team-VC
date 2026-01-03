@@ -6,6 +6,7 @@
 import { useTheme } from "@/context/ThemeContext";
 import { useInView } from "@/hooks";
 import { PlayIcon, ArrowRightIcon } from "@/components/icons";
+import { Link } from "react-router-dom";
 
 export function CTASection() {
   const { resolvedTheme } = useTheme();
@@ -49,20 +50,24 @@ export function CTASection() {
             generation.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button className="group px-8 py-4 rounded-xl bg-linear-to-r from-purple-600 to-cyan-600 hover:from-purple-500 hover:to-cyan-500 transition-all duration-300 shadow-lg shadow-purple-500/25 hover:shadow-purple-500/40 hover:scale-105 flex items-center justify-center gap-3 font-semibold text-white">
+            <Link
+              to="/dashboard"
+              className="group px-8 py-4 rounded-xl bg-linear-to-r from-purple-600 to-cyan-600 hover:from-purple-500 hover:to-cyan-500 transition-all duration-300 shadow-lg shadow-purple-500/25 hover:shadow-purple-500/40 hover:scale-105 active:scale-[0.98] flex items-center justify-center gap-3 font-semibold text-white"
+            >
               <PlayIcon />
-              Launch Demo
+              Launch Dashboard
               <ArrowRightIcon />
-            </button>
-            <button
-              className={`px-8 py-4 rounded-xl border transition-all duration-300 hover:scale-105 flex items-center justify-center gap-3 font-semibold ${
+            </Link>
+            <Link
+              to="/team"
+              className={`px-8 py-4 rounded-xl border transition-all duration-300 hover:scale-105 active:scale-[0.98] flex items-center justify-center gap-3 font-semibold ${
                 resolvedTheme === "dark"
                   ? "bg-white/5 hover:bg-white/10 border-white/10 hover:border-white/20 text-white"
                   : "bg-slate-100 hover:bg-slate-200 border-slate-200 hover:border-slate-300 text-slate-900"
               }`}
             >
-              View Architecture
-            </button>
+              View Team Members
+            </Link>
           </div>
         </div>
       </div>

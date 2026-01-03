@@ -72,7 +72,7 @@ export function Navbar() {
                 <a
                   key={link.href}
                   href={link.href}
-                  className={`transition-colors ${
+                  className={`transition-all duration-200 hover:scale-105 ${
                     resolvedTheme === "dark"
                       ? "text-gray-400 hover:text-white"
                       : "text-slate-600 hover:text-slate-900"
@@ -84,7 +84,7 @@ export function Navbar() {
               <ThemeToggle variant="minimal" />
               <Link
                 to="/dashboard"
-                className={`px-4 py-2 rounded-full transition-all border ${
+                className={`px-4 py-2 rounded-full transition-all duration-200 border hover:scale-105 active:scale-95 ${
                   resolvedTheme === "dark"
                     ? "bg-white/10 hover:bg-white/20 border-white/10"
                     : "bg-slate-900/10 hover:bg-slate-900/20 border-slate-900/10"
@@ -134,7 +134,7 @@ export function Navbar() {
                     {link.label}
                   </a>
                 ))}
-                <button className="mt-4 px-4 py-3 rounded-xl bg-linear-to-r from-purple-600 to-cyan-600 hover:from-purple-500 hover:to-cyan-500 transition-all text-white font-semibold">
+                <button className="mt-4 px-4 py-3 rounded-xl bg-linear-to-r from-purple-600 to-cyan-600 hover:from-purple-500 hover:to-cyan-500 transition-all duration-200 text-white font-semibold hover:scale-[1.02] active:scale-[0.98]">
                   Launch Demo
                 </button>
               </div>

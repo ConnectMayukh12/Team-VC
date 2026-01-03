@@ -6,14 +6,15 @@
 
 import { Link } from "react-router-dom";
 import { useTheme } from "@/context/ThemeContext";
-import "./LoadingPage.css";
+
+// Styles imported via src/styles/index.ts
 
 export function NotFoundPage() {
   const { resolvedTheme } = useTheme();
 
   return (
     <div
-      className={`min-h-screen flex flex-col items-center justify-center px-6 ${
+      className={`min-h-screen flex flex-col items-center justify-center px-6 animate-page-enter ${
         resolvedTheme === "dark"
           ? "bg-linear-to-br from-[#0f0a1f] via-[#1a1035] to-[#0d1117]"
           : "bg-linear-to-br from-slate-50 via-slate-100 to-slate-200"
@@ -83,10 +84,10 @@ export function NotFoundPage() {
       {/* Go to Main Website Button */}
       <Link
         to="/"
-        className="group px-8 py-4 rounded-xl bg-linear-to-r from-purple-600 to-cyan-600 hover:from-purple-500 hover:to-cyan-500 transition-all duration-300 shadow-lg shadow-purple-500/25 hover:shadow-purple-500/40 hover:scale-105 flex items-center justify-center gap-3 font-semibold text-white"
+        className="group px-8 py-4 rounded-xl bg-linear-to-r from-purple-600 to-cyan-600 hover:from-purple-500 hover:to-cyan-500 transition-all duration-300 shadow-lg shadow-purple-500/25 hover:shadow-purple-500/40 hover:scale-105 active:scale-[0.98] flex items-center justify-center gap-3 font-semibold text-white"
       >
         <svg
-          className="w-5 h-5 transition-transform group-hover:-translate-x-1"
+          className="w-5 h-5 transition-transform duration-200 group-hover:-translate-x-1"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"

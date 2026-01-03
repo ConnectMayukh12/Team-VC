@@ -11,17 +11,20 @@ export function ScrollToHash() {
   const { pathname, hash } = useLocation();
 
   useEffect(() => {
-    // If there's a hash in the URL, scroll to that element
     if (hash) {
-      // Small delay to ensure the page has rendered
-      setTimeout(() => {
+      let attempts = 0;
+      const maxAttempts = 10;
+      const scrollToElement = () => {
         const element = document.querySelector(hash);
         if (element) {
           element.scrollIntoView({ behavior: "smooth", block: "start" });
+        } else if (attempts < maxAttempts) {
+          attempts++;
+          setTimeout(scrollToElement, 100);
         }
-      }, 100);
+      };
+      scrollToElement();
     } else {
-      // No hash, scroll to top
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
   }, [pathname, hash]);

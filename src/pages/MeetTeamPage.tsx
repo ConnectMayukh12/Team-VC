@@ -25,7 +25,7 @@ export function MeetTeamPage() {
 
   return (
     <div
-      className={`min-h-screen overflow-x-hidden transition-colors duration-500 ${
+      className={`min-h-screen overflow-x-hidden animate-page-enter ${
         resolvedTheme === "dark"
           ? "bg-linear-to-br from-[#0f0a1f] via-[#1a1035] to-[#0d1117] text-white"
           : "bg-linear-to-br from-slate-50 via-purple-50/50 to-slate-100 text-slate-900"

@@ -31,32 +31,34 @@ export function LandingPage() {
   }, []);
 
   return (
-    <div
-      className={`min-h-screen overflow-x-hidden transition-colors duration-500 ${
-        resolvedTheme === "dark"
-          ? "bg-linear-to-br from-[#0f0a1f] via-[#1a1035] to-[#0d1117] text-white"
-          : "bg-linear-to-br from-slate-50 via-purple-50/50 to-slate-100 text-slate-900"
-      }`}
-    >
-      {/* Animated Background Elements */}
-      <BackgroundElements scrollY={scrollY} />
-
-      {/* Navigation */}
+    <>
+      {/* Navigation - Outside overflow container for proper fixed positioning */}
       <Navbar />
 
-      {/* Main Content */}
-      <main>
-        <HeroSection />
-        <ProblemSection />
-        <SolutionSection />
-        <FeaturesSection />
-        <TechStackSection />
-        <ImpactSection />
-        <CTASection />
-      </main>
+      <div
+        className={`min-h-screen overflow-x-hidden animate-page-enter ${
+          resolvedTheme === "dark"
+            ? "bg-linear-to-br from-[#0f0a1f] via-[#1a1035] to-[#0d1117] text-white"
+            : "bg-linear-to-br from-pink-100 via-white to-blue-100 text-slate-900"
+        }`}
+      >
+        {/* Animated Background Elements */}
+        <BackgroundElements scrollY={scrollY} />
 
-      {/* Footer */}
-      <Footer />
-    </div>
+        {/* Main Content */}
+        <main>
+          <HeroSection />
+          <ProblemSection />
+          <SolutionSection />
+          <FeaturesSection />
+          <TechStackSection />
+          <ImpactSection />
+          <CTASection />
+        </main>
+
+        {/* Footer */}
+        <Footer />
+      </div>
+    </>
   );
 }

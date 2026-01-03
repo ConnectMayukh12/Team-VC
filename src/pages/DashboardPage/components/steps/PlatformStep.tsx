@@ -106,7 +106,7 @@ export function PlatformStep({
             <div
               key={platform.name}
               onClick={() => onTogglePlatform(platform.name)}
-              className={`relative p-4 border-2 rounded-lg cursor-pointer transition-all group ${
+              className={`relative p-4 border-2 rounded-lg cursor-pointer transition-all duration-200 group hover:scale-[1.02] active:scale-[0.98] ${
                 isSelected
                   ? "border-green-500 bg-green-500/10"
                   : resolvedTheme === "dark"
@@ -115,12 +115,12 @@ export function PlatformStep({
               }`}
             >
               {isSelected && (
-                <div className="absolute top-2 right-2 h-5 w-5 bg-green-500 rounded-full flex items-center justify-center">
+                <div className="absolute top-2 right-2 h-5 w-5 bg-green-500 rounded-full flex items-center justify-center animate-scale-in">
                   <CheckIcon className="h-3 w-3 text-white" />
                 </div>
               )}
               <div
-                className={`h-16 rounded-md mb-3 flex items-center justify-center transition-colors ${
+                className={`h-16 rounded-md mb-3 flex items-center justify-center transition-colors duration-200 ${
                   resolvedTheme === "dark"
                     ? "bg-zinc-800 group-hover:bg-zinc-700"
                     : "bg-gray-100 group-hover:bg-gray-200"
