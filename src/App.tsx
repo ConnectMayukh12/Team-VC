@@ -20,6 +20,11 @@ const DashboardPage = lazy(() =>
     default: module.DashboardPage,
   }))
 );
+const NotFoundPage = lazy(() =>
+  import("./pages/NotFoundPage").then((module) => ({
+    default: module.NotFoundPage,
+  }))
+);
 
 function App() {
   return (
@@ -31,6 +36,7 @@ function App() {
             <Route path="/" element={<LandingPage />} />
             <Route path="/team" element={<MeetTeamPage />} />
             <Route path="/dashboard" element={<DashboardPage />} />
+            <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </Suspense>
       </Router>
