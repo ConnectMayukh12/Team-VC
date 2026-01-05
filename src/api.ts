@@ -1,4 +1,4 @@
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL?.replace(/\/$/, '') || '';
 
 interface CreateTurnPayload {
   session_id?: string | null;
@@ -10,7 +10,11 @@ interface CreateTurnPayload {
 }
 
 export async function createTurn(payload: CreateTurnPayload) {
-  const res = await fetch(`${API_BASE_URL}/api/v1/turns`, {
+  const url = `${API_BASE_URL}/api/v1/turns`;
+  console.log('Calling API:', url);
+  console.log('Payload:', payload);
+  
+  const res = await fetch(url, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -19,7 +23,9 @@ export async function createTurn(payload: CreateTurnPayload) {
   });
 
   if (!res.ok) {
-    throw new Error("Failed to create turn");
+    const errorText = await res.text();
+    console.error('API Error:', res.status, errorText);
+    throw new Error(`Failed to create turn: ${res.status} - ${errorText}`);
   }
 
   return res.json();
@@ -44,6 +50,26 @@ export async function getSessionTurns(sessionId: string) {
 
   if (!res.ok) {
     throw new Error("Failed to fetch session turns");
+  }
+
+  return res.json();
+}
+
+export async function getTurn(turnId: string) {
+  const url = `${API_BASE_URL}/api/v1/turns/${turnId}`;
+  console.log('Getting turn:', url);
+  
+  const res = await fetch(url, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  if (!res.ok) {
+    const errorText = await res.text();
+    console.error('Get Turn Error:', res.status, errorText);
+    throw new Error(`Failed to get turn: ${res.status} - ${errorText}`);
   }
 
   return res.json();

@@ -4,11 +4,12 @@
  * @module pages/DashboardPage
  */
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTheme } from "@/context/ThemeContext";
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { Stepper, Step } from "@/components/Stepper";
+import { createTurn, getTurn } from "@/api";
 
 // Local components
 import {
@@ -39,6 +40,10 @@ export function DashboardPage() {
   const [currentStep, setCurrentStep] = useState(1);
   const [isGenerating, setIsGenerating] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
+  
+  // State - API Session Management
+  const [currentSessionId, setCurrentSessionId] = useState<string | null>(null);
+  const [currentTurnId, setCurrentTurnId] = useState<string | null>(null);
 
   // State - Form
   const [selectedPlatforms, setSelectedPlatforms] = useState<string[]>([]);
@@ -99,10 +104,85 @@ export function DashboardPage() {
   });
 
   // Handlers
-  const handleGenerate = () => {
-    initializeChat();
-    setIsGenerating(true);
+  const handleGenerate = async () => {
+    try {
+      // Prepare payload for API
+      const payload = {
+        session_id: currentSessionId,
+        user_text: postDescription || "Generate retail media creative",
+        ui_context: {
+          platforms: selectedPlatforms,
+          postType: selectedPostType,
+          colorPalette: selectedColorPalette,
+          headline,
+          callToAction,
+          offerDiscount,
+          uploadedFiles: uploadedFiles.map(f => f.name),
+        },
+        title_if_new: `Creative for ${selectedPlatforms.join(", ")}`,
+      };
+
+      console.log('Starting generation with payload:', payload);
+      
+      // Call the API
+      const response = await createTurn(payload);
+      console.log('API Response:', response);
+
+      // Store session and turn IDs
+      if (response.session_id) {
+        setCurrentSessionId(response.session_id);
+      }
+      if (response.turn_id) {
+        setCurrentTurnId(response.turn_id);
+      }
+
+      // Initialize chat and start generation
+      initializeChat();
+      setIsGenerating(true);
+    } catch (error) {
+      console.error("Error creating turn:", error);
+      alert(`Failed to generate: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    }
   };
+
+  // Poll for turn updates and sync with chat
+  useEffect(() => {
+    if (!currentTurnId || !isGenerating) return;
+
+    const pollTurn = async () => {
+      try {
+        const turnData = await getTurn(currentTurnId);
+        console.log('Turn data:', turnData);
+
+        // Update chat messages based on turn data
+        if (turnData.messages && Array.isArray(turnData.messages)) {
+          const formattedMessages = turnData.messages.map((msg: any) => ({
+            role: msg.role === 'user' ? 'user' : 'ai',
+            content: msg.content || msg.text || '',
+            type: msg.type || 'text',
+          }));
+          
+          // You can update chat messages here if needed
+          console.log('Formatted messages:', formattedMessages);
+        }
+
+        // If turn is complete, stop polling
+        if (turnData.status === 'complete' || turnData.status === 'completed') {
+          console.log('Turn completed');
+        }
+      } catch (error) {
+        console.error('Error polling turn:', error);
+      }
+    };
+
+    // Initial poll
+    pollTurn();
+
+    // Poll every 2 seconds
+    const interval = setInterval(pollTurn, 2000);
+
+    return () => clearInterval(interval);
+  }, [currentTurnId, isGenerating]);
 
   const togglePlatform = (platformName: string) => {
     setSelectedPlatforms((prev) =>
@@ -132,6 +212,9 @@ export function DashboardPage() {
     setCallToAction("");
     setOfferDiscount("");
     setSelectedGeneration(null);
+    
+    // Reset session state (keep session_id for continuation)
+    setCurrentTurnId(null);
   };
 
   return (
