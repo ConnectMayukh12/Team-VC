@@ -247,4 +247,3 @@ export function DashboardPage() {
     </SidebarProvider>
   );
 }
- //replace with actual api links
