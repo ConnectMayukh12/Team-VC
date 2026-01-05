@@ -163,3 +163,5 @@ export function ChatInput({
     </div>
   );
 }
+
+//chat input is used after initial generation

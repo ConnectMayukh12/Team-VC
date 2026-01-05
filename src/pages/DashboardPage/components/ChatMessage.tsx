@@ -187,3 +187,5 @@ export function ChatMessage({
     </div>
   );
 }
+
+//llm interface where the post gets generated. 
