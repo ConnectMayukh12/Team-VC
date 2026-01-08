@@ -32,6 +32,7 @@ interface UseChatMessagesReturn {
   initializeChat: () => void;
   resetChat: () => void;
   setMessagesFromApi: (messages: ChatMessage[]) => void;
+  addChatMessage: (message: ChatMessage) => void;
 }
 
 export function useChatMessages({
@@ -147,7 +148,6 @@ export function useChatMessages({
       { role: "ai", content: aiMessages[0], type: "text" },
       { role: "ai", content: aiMessages[1], type: "text" },
       { role: "ai", content: aiMessages[2], type: "text" },
-      { role: "ai", content: "initial-image", type: "image" },
     ]);
   };
 
@@ -159,9 +159,12 @@ export function useChatMessages({
   };
 
   const setMessagesFromApi = (messages: ChatMessage[]) => {
-    // Overwrite local chat messages with API-provided authoritative messages
     setChatMessages(messages);
   };
+   const addChatMessage = (message: ChatMessage) => {
+  setChatMessages((prev) => [...prev, message]);
+};
+
 
   return {
     chatMessages,
@@ -177,5 +180,6 @@ export function useChatMessages({
     initializeChat,
     resetChat,
     setMessagesFromApi,
+    addChatMessage
   };
 }

@@ -100,7 +100,6 @@ export function ChatMessage({
         message.role === "user" ? "justify-end" : "justify-start"
       }`}
     >
-      {/* Avatar (AI only) */}
       {message.role === "ai" && (
         <div className="shrink-0">
           <div className="h-10 w-10 rounded-full bg-yellow-500 flex items-center justify-center">
