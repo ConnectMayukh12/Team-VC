@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { useTheme } from "@/context/ThemeContext";
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { Stepper, Step } from "@/components/Stepper";
-import { createTurn, getTurn, getArtifactUrl } from "@/api";
+import { createTurn, getTurn } from "@/api";
 
 // Local components
 import {
@@ -164,20 +164,7 @@ export function DashboardPage() {
 
       console.log('Formatted messages:', formattedMessages);
     }
-
-    if (turnData.outputs?.artifacts?.length) {
-  const filename = "1080_1080.png";
-  const imageUrl = getArtifactUrl(
-    turnData.session_id,
-    turnData._id, 
-    filename
-  );
-  handleSendMessage({
-    role: "ai",
-    type: "image",
-    content: imageUrl,
-  });
-}
+  
 
     if (turnData.status === 'complete' || turnData.status === 'completed') {
       console.log('Turn completed');
