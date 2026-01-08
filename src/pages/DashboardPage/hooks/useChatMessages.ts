@@ -31,6 +31,7 @@ interface UseChatMessagesReturn {
   insertCommand: (command: string) => void;
   initializeChat: () => void;
   resetChat: () => void;
+  setMessagesFromApi: (messages: ChatMessage[]) => void;
 }
 
 export function useChatMessages({
@@ -157,6 +158,11 @@ export function useChatMessages({
     setFilteredCommands([]);
   };
 
+  const setMessagesFromApi = (messages: ChatMessage[]) => {
+    // Overwrite local chat messages with API-provided authoritative messages
+    setChatMessages(messages);
+  };
+
   return {
     chatMessages,
     userInput,
@@ -170,5 +176,6 @@ export function useChatMessages({
     insertCommand,
     initializeChat,
     resetChat,
+    setMessagesFromApi,
   };
 }

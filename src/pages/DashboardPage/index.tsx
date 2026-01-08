@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { useTheme } from "@/context/ThemeContext";
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { Stepper, Step } from "@/components/Stepper";
-import { createTurn, getTurn } from "@/api";
+import { createTurn, getTurn, getArtifactUrl } from "@/api";
 
 // Local components
 import {
@@ -26,7 +26,7 @@ import {
 import { useTypingEffect, useChatMessages, useFileUpload } from "./hooks";
 
 // Constants
-import { MOCK_GENERATIONS, AVAILABLE_COMMANDS } from "./constants";
+import {  MOCK_GENERATIONS, AVAILABLE_COMMANDS } from "./constants";
 
 export function DashboardPage() {
   // Navigation
@@ -150,30 +150,42 @@ export function DashboardPage() {
     if (!currentTurnId || !isGenerating) return;
 
     const pollTurn = async () => {
-      try {
-        const turnData = await getTurn(currentTurnId);
-        console.log('Turn data:', turnData);
+  try {
+    const turnData = await getTurn(currentTurnId);
+    console.log('Turn data:', turnData);
 
-        // Update chat messages based on turn data
-        if (turnData.messages && Array.isArray(turnData.messages)) {
-          const formattedMessages = turnData.messages.map((msg: any) => ({
-            role: msg.role === 'user' ? 'user' : 'ai',
-            content: msg.content || msg.text || '',
-            type: msg.type || 'text',
-          }));
-          
-          // You can update chat messages here if needed
-          console.log('Formatted messages:', formattedMessages);
-        }
+    // Update chat messages based on turn data
+    if (turnData.messages && Array.isArray(turnData.messages)) {
+      const formattedMessages = turnData.messages.map((msg: any) => ({
+        role: msg.role === 'user' ? 'user' : 'ai',
+        content: msg.content || msg.text || '',
+        type: msg.type || 'text',
+      }));
 
-        // If turn is complete, stop polling
-        if (turnData.status === 'complete' || turnData.status === 'completed') {
-          console.log('Turn completed');
-        }
-      } catch (error) {
-        console.error('Error polling turn:', error);
-      }
-    };
+      console.log('Formatted messages:', formattedMessages);
+    }
+
+    if (turnData.outputs?.artifacts?.length) {
+  const filename = "1080_1080.png";
+  const imageUrl = getArtifactUrl(
+    turnData.session_id,
+    turnData._id, 
+    filename
+  );
+  handleSendMessage({
+    role: "ai",
+    type: "image",
+    content: imageUrl,
+  });
+}
+
+    if (turnData.status === 'complete' || turnData.status === 'completed') {
+      console.log('Turn completed');
+    }
+  } catch (error) {
+    console.error('Error polling turn:', error);
+  }
+};
 
     // Initial poll
     pollTurn();
@@ -330,3 +342,4 @@ export function DashboardPage() {
     </SidebarProvider>
   );
 }
+

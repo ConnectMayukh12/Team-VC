@@ -4,7 +4,6 @@
  */
 
 import type { ChatMessage as ChatMessageType } from "../types";
-import { IMAGE_VARIANTS } from "../constants";
 
 interface ChatMessageProps {
   message: ChatMessageType;
@@ -25,19 +24,16 @@ export function ChatMessage({
   isTyping,
   aiMessageIndex,
   currentAiMessageIndex,
-  allMessages,
 }: ChatMessageProps) {
-  // Render image messages
-  if (message.type === "image") {
-    const imageMessages = allMessages.filter((m) => m.type === "image");
-    const imageIndex = imageMessages.indexOf(message) % IMAGE_VARIANTS.length;
 
+  if (message.type === "image") {
     return (
       <div
         key={index}
         className="flex gap-4 justify-start animate-fade-in"
         style={{ animationDelay: `${index * 50}ms` }}
       >
+        {/* Avatar */}
         <div className="shrink-0">
           <div className="h-10 w-10 rounded-full bg-yellow-500 flex items-center justify-center">
             <span className="text-sm font-bold text-black tracking-tight">
@@ -45,6 +41,8 @@ export function ChatMessage({
             </span>
           </div>
         </div>
+
+        {/* Image Content */}
         <div className="flex-1 max-w-3xl">
           <div
             className={`mb-1 text-sm font-medium ${
@@ -53,43 +51,40 @@ export function ChatMessage({
           >
             VC Assistant
           </div>
+
           <div
             className={`rounded-2xl overflow-hidden border ${
-              resolvedTheme === "dark" ? "border-zinc-700" : "border-gray-200"
+              resolvedTheme === "dark"
+                ? "border-zinc-700"
+                : "border-gray-200"
             }`}
           >
-            <div className="relative">
-              <img
-                src={IMAGE_VARIANTS[imageIndex]}
-                alt="Generated Creative"
-                className="w-full max-w-md h-auto animate-image-reveal"
-                style={{
-                  animation: "imageReveal 1.5s ease-out forwards",
-                }}
-              />
-              <div
-                className="absolute inset-0 bg-linear-to-b from-transparent via-transparent to-transparent animate-scan-line"
-                style={{
-                  background:
-                    "linear-gradient(to bottom, transparent 0%, rgba(34, 197, 94, 0.3) 50%, transparent 100%)",
-                  animation: "scanLine 1.5s ease-out forwards",
-                }}
-              />
-            </div>
+            <img
+              src={message.content}
+              alt="Generated Creative"
+              className="w-full max-w-md h-auto animate-image-reveal"
+              onError={(e) => {
+                (e.target as HTMLImageElement).src =
+                  "/image-load-failed.png";
+              }}
+            />
+
             <div
               className={`px-4 py-3 ${
-                resolvedTheme === "dark" ? "bg-zinc-800" : "bg-gray-100"
+                resolvedTheme === "dark"
+                  ? "bg-zinc-800"
+                  : "bg-gray-100"
               }`}
             >
               <p
                 className={`text-sm ${
-                  resolvedTheme === "dark" ? "text-zinc-300" : "text-gray-700"
+                  resolvedTheme === "dark"
+                    ? "text-zinc-300"
+                    : "text-gray-700"
                 }`}
               >
-                🎨{" "}
-                {index === allMessages.findIndex((m) => m.type === "image")
-                  ? "Your creative is ready! Use @ commands to make adjustments."
-                  : "Here's your updated creative with the applied modifications!"}
+                🎨 Your creative is ready! Use <strong>@</strong> commands to
+                make adjustments.
               </p>
             </div>
           </div>
@@ -98,7 +93,6 @@ export function ChatMessage({
     );
   }
 
-  // Render text messages
   return (
     <div
       key={index}
@@ -106,7 +100,7 @@ export function ChatMessage({
         message.role === "user" ? "justify-end" : "justify-start"
       }`}
     >
-      {/* Avatar - Only show on left for AI */}
+      {/* Avatar (AI only) */}
       {message.role === "ai" && (
         <div className="shrink-0">
           <div className="h-10 w-10 rounded-full bg-yellow-500 flex items-center justify-center">
@@ -117,7 +111,7 @@ export function ChatMessage({
         </div>
       )}
 
-      {/* Message Content */}
+      {/* Message Bubble */}
       <div
         className={`flex-1 max-w-3xl ${
           message.role === "user" ? "flex flex-col items-end" : ""
@@ -129,6 +123,7 @@ export function ChatMessage({
           }`}
         >
           {message.role === "user" ? "You" : "VC Assistant"}
+
           {message.role === "ai" &&
             aiMessageIndex === currentAiMessageIndex &&
             isTyping && (
@@ -137,6 +132,7 @@ export function ChatMessage({
               </span>
             )}
         </div>
+
         <div
           className={`rounded-2xl px-4 py-3 ${
             message.role === "user"
@@ -149,7 +145,8 @@ export function ChatMessage({
           }`}
         >
           <p className="whitespace-pre-wrap text-sm leading-relaxed">
-            {(message.role === "ai" && aiMessageIndex === currentAiMessageIndex
+            {(message.role === "ai" &&
+            aiMessageIndex === currentAiMessageIndex
               ? displayedAiText
               : message.content
             )
@@ -157,6 +154,7 @@ export function ChatMessage({
               .map((part, i) =>
                 i % 2 === 1 ? <strong key={i}>{part}</strong> : part
               )}
+
             {message.role === "ai" &&
               aiMessageIndex === currentAiMessageIndex &&
               isTyping && (
@@ -166,7 +164,7 @@ export function ChatMessage({
         </div>
       </div>
 
-      {/* Avatar - Only show on right for User */}
+      {/* Avatar (User only) */}
       {message.role === "user" && (
         <div className="shrink-0">
           <div
@@ -176,7 +174,9 @@ export function ChatMessage({
           >
             <span
               className={`text-sm font-medium ${
-                resolvedTheme === "dark" ? "text-white" : "text-gray-700"
+                resolvedTheme === "dark"
+                  ? "text-white"
+                  : "text-gray-700"
               }`}
             >
               U
@@ -187,5 +187,3 @@ export function ChatMessage({
     </div>
   );
 }
-
-//llm interface where the post gets generated. 

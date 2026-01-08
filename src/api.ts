@@ -74,3 +74,10 @@ export async function getTurn(turnId: string) {
 
   return res.json();
 }
+ export function getArtifactUrl(
+  sessionId: string,
+  turnId: string,
+  filename: string
+) {
+  return `${API_BASE_URL}/api/v1/artifacts/${sessionId}/${turnId}/${filename}`;
+}
