@@ -4,12 +4,12 @@
  * @module pages/DashboardPage
  */
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTheme } from "@/context/ThemeContext";
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { Stepper, Step } from "@/components/Stepper";
-import { createTurn, getTurn } from "@/api";
+import { createTurn, getTurn, getArtifactUrl } from "@/api";
 
 // Local components
 import {
@@ -26,7 +26,7 @@ import {
 import { useTypingEffect, useChatMessages, useFileUpload } from "./hooks";
 
 // Constants
-import {  MOCK_GENERATIONS, AVAILABLE_COMMANDS } from "./constants";
+import { MOCK_GENERATIONS, AVAILABLE_COMMANDS } from "./constants";
 
 export function DashboardPage() {
   // Navigation
@@ -35,15 +35,17 @@ export function DashboardPage() {
 
   // State - General
   const [selectedGeneration, setSelectedGeneration] = useState<string | null>(
-    null
+    null,
   );
   const [currentStep, setCurrentStep] = useState(1);
   const [isGenerating, setIsGenerating] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
-  
+
   // State - API Session Management
   const [currentSessionId, setCurrentSessionId] = useState<string | null>(null);
   const [currentTurnId, setCurrentTurnId] = useState<string | null>(null);
+  const imageAddedRef = useRef(false);
+  const intervalRef = useRef<NodeJS.Timeout>();
 
   // State - Form
   const [selectedPlatforms, setSelectedPlatforms] = useState<string[]>([]);
@@ -81,6 +83,8 @@ export function DashboardPage() {
     insertCommand,
     initializeChat,
     resetChat,
+    setMessagesFromApi,
+    addChatMessage,
   } = useChatMessages({
     selectedPlatforms,
     uploadedFiles,
@@ -117,16 +121,16 @@ export function DashboardPage() {
           headline,
           callToAction,
           offerDiscount,
-          uploadedFiles: uploadedFiles.map(f => f.name),
+          uploadedFiles: uploadedFiles.map((f) => f.name),
         },
         title_if_new: `Creative for ${selectedPlatforms.join(", ")}`,
       };
 
-      console.log('Starting generation with payload:', payload);
-      
+      console.log("Starting generation with payload:", payload);
+
       // Call the API
       const response = await createTurn(payload);
-      console.log('API Response:', response);
+      console.log("API Response:", response);
 
       // Store session and turn IDs
       if (response.session_id) {
@@ -137,11 +141,14 @@ export function DashboardPage() {
       }
 
       // Initialize chat and start generation
+      imageAddedRef.current = false;
       initializeChat();
       setIsGenerating(true);
     } catch (error) {
       console.error("Error creating turn:", error);
-      alert(`Failed to generate: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      alert(
+        `Failed to generate: ${error instanceof Error ? error.message : "Unknown error"}`,
+      );
     }
   };
 
@@ -150,44 +157,55 @@ export function DashboardPage() {
     if (!currentTurnId || !isGenerating) return;
 
     const pollTurn = async () => {
-  try {
-    const turnData = await getTurn(currentTurnId);
-    console.log('Turn data:', turnData);
+      try {
+        const turnData = await getTurn(currentTurnId);
+        console.log("Turn data:", turnData);
 
-    // Update chat messages based on turn data
-    if (turnData.messages && Array.isArray(turnData.messages)) {
-      const formattedMessages = turnData.messages.map((msg: any) => ({
-        role: msg.role === 'user' ? 'user' : 'ai',
-        content: msg.content || msg.text || '',
-        type: msg.type || 'text',
-      }));
+        if (turnData.outputs?.artifacts?.length && !imageAddedRef.current) {
+          const imageArtifact = turnData.outputs.artifacts.find(
+            (a) => a.type === "image",
+          );
 
-      console.log('Formatted messages:', formattedMessages);
-    }
-  
+          if (imageArtifact) {
+            const filename = imageArtifact.uri.split("/").pop();
+            const imageUrl = getArtifactUrl(
+              turnData.session_id,
+              turnData._id,
+              filename,
+            );
 
-    if (turnData.status === 'complete' || turnData.status === 'completed') {
-      console.log('Turn completed');
-    }
-  } catch (error) {
-    console.error('Error polling turn:', error);
-  }
-};
+            addChatMessage({
+              role: "ai",
+              type: "image",
+              content: imageUrl,
+            });
 
-    // Initial poll
+            imageAddedRef.current = true;
+          }
+        }
+
+        if (turnData.status === "complete" || turnData.status === "completed") {
+          console.log("Turn completed");
+          clearInterval(intervalRef.current); // stop polling
+        }
+      } catch (error) {
+        console.error("Polling error:", error);
+      }
+    };
+
+    // First poll immediately
     pollTurn();
 
     // Poll every 2 seconds
-    const interval = setInterval(pollTurn, 2000);
+    intervalRef.current = setInterval(pollTurn, 2000);
 
-    return () => clearInterval(interval);
+    return () => clearInterval(intervalRef.current);
   }, [currentTurnId, isGenerating]);
-
   const togglePlatform = (platformName: string) => {
     setSelectedPlatforms((prev) =>
       prev.includes(platformName)
         ? prev.filter((p) => p !== platformName)
-        : [...prev, platformName]
+        : [...prev, platformName],
     );
   };
 
@@ -211,9 +229,10 @@ export function DashboardPage() {
     setCallToAction("");
     setOfferDiscount("");
     setSelectedGeneration(null);
-    
+
     // Reset session state (keep session_id for continuation)
     setCurrentTurnId(null);
+    imageAddedRef.current = false;
   };
 
   return (
@@ -329,4 +348,3 @@ export function DashboardPage() {
     </SidebarProvider>
   );
 }
-
