@@ -39,13 +39,14 @@ export function DashboardPage() {
   );
   const [currentStep, setCurrentStep] = useState(1);
   const [isGenerating, setIsGenerating] = useState(false);
+  const [isSubmittingGeneration, setIsSubmittingGeneration] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   // State - API Session Management
   const [currentSessionId, setCurrentSessionId] = useState<string | null>(null);
   const [currentTurnId, setCurrentTurnId] = useState<string | null>(null);
   const imageAddedRef = useRef(false);
-  const intervalRef = useRef<NodeJS.Timeout>();
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   // State - Form
   const [selectedPlatforms, setSelectedPlatforms] = useState<string[]>([]);
@@ -83,7 +84,6 @@ export function DashboardPage() {
     insertCommand,
     initializeChat,
     resetChat,
-    setMessagesFromApi,
     addChatMessage,
   } = useChatMessages({
     selectedPlatforms,
@@ -109,6 +109,8 @@ export function DashboardPage() {
 
   // Handlers
   const handleGenerate = async () => {
+    setIsSubmittingGeneration(true);
+
     try {
       // Prepare payload for API
       const payload = {
@@ -143,8 +145,10 @@ export function DashboardPage() {
       // Initialize chat and start generation
       imageAddedRef.current = false;
       initializeChat();
+      setIsSubmittingGeneration(false);
       setIsGenerating(true);
     } catch (error) {
+      setIsSubmittingGeneration(false);
       console.error("Error creating turn:", error);
       alert(
         `Failed to generate: ${error instanceof Error ? error.message : "Unknown error"}`,
@@ -163,7 +167,8 @@ export function DashboardPage() {
 
         if (turnData.outputs?.artifacts?.length && !imageAddedRef.current) {
           const imageArtifact = turnData.outputs.artifacts.find(
-            (a) => a.type === "image",
+            (artifact: { type?: string; uri: string }) =>
+              artifact.type === "image",
           );
 
           if (imageArtifact) {
@@ -186,7 +191,9 @@ export function DashboardPage() {
 
         if (turnData.status === "complete" || turnData.status === "completed") {
           console.log("Turn completed");
-          clearInterval(intervalRef.current); // stop polling
+          if (intervalRef.current) {
+            clearInterval(intervalRef.current); // stop polling
+          }
         }
       } catch (error) {
         console.error("Polling error:", error);
@@ -199,7 +206,11 @@ export function DashboardPage() {
     // Poll every 2 seconds
     intervalRef.current = setInterval(pollTurn, 2000);
 
-    return () => clearInterval(intervalRef.current);
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+    };
   }, [currentTurnId, isGenerating]);
   const togglePlatform = (platformName: string) => {
     setSelectedPlatforms((prev) =>
@@ -216,6 +227,7 @@ export function DashboardPage() {
   const handleNewCreative = () => {
     // Reset all state for a fresh start
     setIsGenerating(false);
+    setIsSubmittingGeneration(false);
     resetChat();
     resetTyping();
     setShowSuccessModal(false);
@@ -281,6 +293,35 @@ export function DashboardPage() {
                 resolvedTheme={resolvedTheme}
               />
             </>
+          ) : isSubmittingGeneration ? (
+            <div className="mx-auto flex min-h-[70vh] max-w-3xl items-center justify-center px-4">
+              <div
+                className={`w-full rounded-3xl border px-8 py-16 text-center shadow-xl ${
+                  resolvedTheme === "dark"
+                    ? "border-zinc-700 bg-zinc-900/60"
+                    : "border-gray-200 bg-white/90"
+                }`}
+              >
+                <div className="mx-auto mb-6 h-14 w-14 animate-spin rounded-full border-4 border-green-500/20 border-t-green-500" />
+                <h2
+                  className={`text-2xl font-semibold ${
+                    resolvedTheme === "dark" ? "text-white" : "text-gray-900"
+                  }`}
+                >
+                  Generating your ad...
+                </h2>
+                <p
+                  className={`mx-auto mt-3 max-w-xl text-sm leading-relaxed ${
+                    resolvedTheme === "dark"
+                      ? "text-zinc-400"
+                      : "text-gray-600"
+                  }`}
+                >
+                  We&apos;re processing your final inputs and preparing the next
+                  screen. This loader will stay here until the response is ready.
+                </p>
+              </div>
+            </div>
           ) : (
             <div className="mx-auto max-w-4xl lg:max-w-6xl xl:max-w-7xl 2xl:max-w-350">
               <Stepper
